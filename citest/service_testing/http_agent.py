@@ -207,6 +207,21 @@ class HttpAgent(base_agent.BaseAgent):
     """Binds HttpScrubber for removing private information when logging HTTP."""
     self.__http_scrubber = scrubber
 
+  @property
+  def request_mutator(self):
+    """Returns the bound RequestMutator for custom request mutations."""
+    return self.__request_mutator
+
+  @request_mutator.setter
+  def set_request_mutator(self, mutator):
+    """Sets this HttpAgent instance's request_mutator to the given mutator.
+
+    Args:
+      mutator: [RequestMutator] The mutator to set as this instance's request
+        mutator.
+    """
+    self.__request_mutator = mutator
+
   @staticmethod
   def make_json_payload_from_object(payload_obj):
     """Make an HTTP payload as the JSON form of an object instance.
@@ -232,17 +247,20 @@ class HttpAgent(base_agent.BaseAgent):
     payload_dict = kwargs
     return json.JSONEncoder().encode(payload_dict)
 
-  def __init__(self, base_url):
+  def __init__(self, base_url, request_mutator=None):
     """Constructs instance.
 
     Args:
       base_url: [string] Specifies the base url to this agent's HTTP endpoint.
+      request_mutator: [RequestMutator] Specifies a mutator that will be called
+        for each outgoing request from this HttpAgent.
     """
     super(HttpAgent, self).__init__()
     self.__base_url = base_url
     self.__status_class = HttpOperationStatus
     self.__headers = {}
     self.__http_scrubber = HttpScrubber()
+    self.__request_mutator = request_mutator
 
   def add_header(self, key, value):
     """Specifies a header to add to each request that follows.
@@ -336,6 +354,9 @@ class HttpAgent(base_agent.BaseAgent):
 
     req = urllib2.Request(url=url, data=data, headers=all_headers)
     req.get_method = lambda: http_type
+
+    if self.request_mutator is not None:
+      self.request_mutator.mutate_request(req)
 
     scrubbed_url = self.__http_scrubber.scrub_url(url)
     scrubbed_data = self.__http_scrubber.scrub_request(data)

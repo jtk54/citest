@@ -392,7 +392,7 @@ class SpinnakerAgent(service_testing.HttpAgent):
     """
     return self.config_dict
 
-  def __init__(self, base_url, status_factory):
+  def __init__(self, base_url, status_factory, request_mutator=None):
     """Construct a an agent for talking to spinnaker.
 
     This could really be any spinnaker subsystem, not just the master process.
@@ -405,7 +405,8 @@ class SpinnakerAgent(service_testing.HttpAgent):
       status_factory: [SpinnakerStatus (SpinnakerAgent, HttpResponseType)]
          Factory method for creating specialized SpinnakerStatus instances.
     """
-    super(SpinnakerAgent, self).__init__(base_url)
+    super(SpinnakerAgent, self).__init__(base_url,
+                                         request_mutator=request_mutator)
     self.__deployed_config = {}
     self.__default_status_factory = status_factory
 

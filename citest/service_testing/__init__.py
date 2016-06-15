@@ -77,3 +77,9 @@ from agent_test_case import (
     AgentTestScenario)
 
 from scenario_test_runner import ScenarioTestRunner
+
+from request_mutator import RequestMutator
+
+from idp_manager import (
+    IDPSessionManager,
+    IDPSessionError)
