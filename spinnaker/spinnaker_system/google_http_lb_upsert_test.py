@@ -137,6 +137,7 @@ class GoogleHttpLoadBalancerTest(st.AgentTestCase):
     return citest.base.TestRunner.global_runner().get_shared_data(
         GoogleHttpLoadBalancerTestScenario)
 
+  # Test letters f and n are reserved for another test derived from this one.
   def test_c_upsert_min_lb(self):
     self.run_test_case(self.scenario.upsert_min_load_balancer())
 
