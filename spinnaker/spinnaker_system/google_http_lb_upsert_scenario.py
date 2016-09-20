@@ -15,16 +15,11 @@
 # Test scenario for Gcp Http(s) Load Balancers.
 
 # Standard python modules.
-from OpenSSL import crypto
 import copy
 import json
-import sys
 import time
-import uuid
 
 # citest modules.
-from citest.base import ExecutionContext
-import citest
 import citest.gcp_testing as gcp
 import citest.json_predicate as jp
 import citest.service_testing as st

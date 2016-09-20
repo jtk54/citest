@@ -35,6 +35,7 @@ import citest.service_testing as st
 from google_http_lb_upsert_scenario import GoogleHttpLoadBalancerTestScenario, SCOPES
 
 
+# pylint: disable=too-many-public-methods
 class GoogleHttpLoadBalancerTest(st.AgentTestCase):
   '''Test fixture for Http LB test.
   '''
@@ -44,7 +45,7 @@ class GoogleHttpLoadBalancerTest(st.AgentTestCase):
 
 
   @staticmethod
-  def make_ssl_cert(name, bindings):
+  def make_ssl_cert(name):
     '''Create and return an SslCertificate in dictionary format.
     '''
     key = crypto.PKey()
@@ -92,19 +93,23 @@ class GoogleHttpLoadBalancerTest(st.AgentTestCase):
     if not verify_results:
       raise RuntimeError('Insufficient Quota: {0}'.format(verify_results))
 
+    # No predicates against this agent, context is empty.
     context = ExecutionContext()
-    compute_agent = gcp.GcpComputeAgent.make_agent(scopes=SCOPES,
-                                                   credentials_path=bindings['GCE_CREDENTIALS_PATH'])
-    compute_agent.invoke_resource(context, # No predicates against this agent, context is empty.
-                                  'insert',
-                                  resource_type='sslCertificates',
-                                  project=bindings['GCE_PROJECT'],
-                                  body=cls.make_ssl_cert(cls.FIRST_CERT, bindings))
+    compute_agent = (gcp.GcpComputeAgent
+                     .make_agent(scopes=SCOPES,
+                                 credentials_path=bindings['GCE_CREDENTIALS_PATH']))
     compute_agent.invoke_resource(context,
                                   'insert',
                                   resource_type='sslCertificates',
                                   project=bindings['GCE_PROJECT'],
-                                  body=cls.make_ssl_cert(cls.SECOND_CERT, bindings))
+                                  body=cls.make_ssl_cert(cls.FIRST_CERT,
+                                                         bindings))
+    compute_agent.invoke_resource(context,
+                                  'insert',
+                                  resource_type='sslCertificates',
+                                  project=bindings['GCE_PROJECT'],
+                                  body=cls.make_ssl_cert(cls.SECOND_CERT,
+                                                         bindings))
 
 
   @classmethod
@@ -112,8 +117,9 @@ class GoogleHttpLoadBalancerTest(st.AgentTestCase):
     runner = citest.base.TestRunner.global_runner()
     bindings = runner.bindings
     context = ExecutionContext()
-    compute_agent = gcp.GcpComputeAgent.make_agent(scopes=SCOPES,
-                                                   credentials_path=bindings['GCE_CREDENTIALS_PATH'])
+    compute_agent = (gcp.GcpComputeAgent
+                     .make_agent(scopes=SCOPES,
+                                 credentials_path=bindings['GCE_CREDENTIALS_PATH']))
     compute_agent.invoke_resource(context,
                                   'delete',
                                   resource_type='sslCertificates',
@@ -134,31 +140,34 @@ class GoogleHttpLoadBalancerTest(st.AgentTestCase):
   def test_c_upsert_min_lb(self):
     self.run_test_case(self.scenario.upsert_min_load_balancer())
 
-  def test_p_upsert_full_lb(self):
+  def test_d_upsert_full_lb(self):
     self.run_test_case(self.scenario.upsert_full_load_balancer())
 
-  def test_s_change_hc(self):
+  def test_e_add_security_group(self):
+    self.run_test_case(self.scenario.add_security_group())
+
+  def test_g_change_hc(self):
     self.run_test_case(self.scenario.change_health_check())
 
-  def test_t_change_bs(self):
+  def test_h_change_bs(self):
     self.run_test_case(self.scenario.change_backend_service())
 
-  def test_u_add_host_rule(self):
+  def test_i_add_host_rule(self):
     self.run_test_case(self.scenario.add_host_rule())
 
-  def test_v_update_host_rule(self):
+  def test_j_update_host_rule(self):
     self.run_test_case(self.scenario.update_host_rule())
 
-  def test_w_update_port_range(self):
+  def test_k_update_port_range(self):
     self.run_test_case(self.scenario.update_port_range())
 
-  def test_x_add_cert(self):
+  def test_l_add_cert(self):
     self.run_test_case(self.scenario.add_cert(self.__class__.FIRST_CERT))
 
-  def test_y_change_cert(self):
+  def test_m_change_cert(self):
     self.run_test_case(self.scenario.add_cert(self.__class__.SECOND_CERT))
 
-  def test_z_delete_lb(self):
+  def test_o_delete_lb(self):
     self.run_test_case(self.scenario.delete_load_balancer())
 
 
