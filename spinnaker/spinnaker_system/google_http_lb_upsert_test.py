@@ -32,7 +32,8 @@ import citest.gcp_testing as gcp
 import citest.service_testing as st
 
 # Spinnaker modules.
-from google_http_lb_upsert_scenario import GoogleHttpLoadBalancerTestScenario, SCOPES
+from google_http_lb_upsert_scenario import GoogleHttpLoadBalancerTestScenario, \
+  SCOPES
 
 
 # pylint: disable=too-many-public-methods
@@ -95,9 +96,10 @@ class GoogleHttpLoadBalancerTest(st.AgentTestCase):
 
     # No predicates against this agent, context is empty.
     context = ExecutionContext()
-    compute_agent = (gcp.GcpComputeAgent
-                     .make_agent(scopes=SCOPES,
-                                 credentials_path=bindings['GCE_CREDENTIALS_PATH']))
+    compute_agent = (
+      gcp.GcpComputeAgent
+      .make_agent(scopes=SCOPES,
+                  credentials_path=bindings['GCE_CREDENTIALS_PATH']))
     compute_agent.invoke_resource(context,
                                   'insert',
                                   resource_type='sslCertificates',
@@ -117,9 +119,10 @@ class GoogleHttpLoadBalancerTest(st.AgentTestCase):
     runner = citest.base.TestRunner.global_runner()
     bindings = runner.bindings
     context = ExecutionContext()
-    compute_agent = (gcp.GcpComputeAgent
-                     .make_agent(scopes=SCOPES,
-                                 credentials_path=bindings['GCE_CREDENTIALS_PATH']))
+    compute_agent = (
+      gcp.GcpComputeAgent
+      .make_agent(scopes=SCOPES,
+                  credentials_path=bindings['GCE_CREDENTIALS_PATH']))
     compute_agent.invoke_resource(context,
                                   'delete',
                                   resource_type='sslCertificates',
@@ -180,7 +183,8 @@ def main():
 
   defaults = {
       'TEST_STACK': str(GoogleHttpLoadBalancerTestScenario.DEFAULT_TEST_ID),
-      'TEST_APP': 'gcphttplbtest' + GoogleHttpLoadBalancerTestScenario.DEFAULT_TEST_ID
+      'TEST_APP': ('gcphttplbtest'
+                   + GoogleHttpLoadBalancerTestScenario.DEFAULT_TEST_ID)
   }
 
   return citest.base.TestRunner.main(

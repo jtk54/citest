@@ -169,7 +169,8 @@ class GoogleHttpLoadBalancerTestScenario(sk.SpinnakerTestScenario):
     health_checks = [service['healthCheck'] for service in backend_services]
 
     hc_clause_builder = (contract_builder
-                         .new_clause_builder('Health Checks Created', retryable_for_secs=30)
+                         .new_clause_builder('Health Checks Created',
+                                             retryable_for_secs=30)
                          .list_resource('httpHealthChecks'))
     for hc in health_checks:
       hc_clause_builder.contains_pred_list(
@@ -181,19 +182,22 @@ class GoogleHttpLoadBalancerTestScenario(sk.SpinnakerTestScenario):
       )
 
     bs_clause_builder = (contract_builder.
-                         new_clause_builder('Backend Services Created', retryable_for_secs=30).
+                         new_clause_builder('Backend Services Created',
+                                            retryable_for_secs=30).
                          list_resource('backendServices'))
     for bs in backend_services:
       bs_clause_builder.contains_pred_list(
         [
          jp.PathEqPredicate('name', bs['name']),
          jp.PathEqPredicate('portName', 'http'),
-         jp.PathContainsPredicate('healthChecks[0]', self._get_hc_link(bs['healthCheck']['name']))
+         jp.PathContainsPredicate('healthChecks[0]',
+                                  self._get_hc_link(bs['healthCheck']['name']))
         ]
       )
 
     url_map_clause_builder = (contract_builder
-                              .new_clause_builder('Url Map Created', retryable_for_secs=30)
+                              .new_clause_builder('Url Map Created',
+                                                  retryable_for_secs=30)
                               .list_resource('urlMaps'))
     for hr in host_rules:
       pred_list = []
@@ -202,8 +206,9 @@ class GoogleHttpLoadBalancerTestScenario(sk.SpinnakerTestScenario):
         jp.PathEqPredicate('name', self.__lb_name),
         jp.PathEqPredicate('defaultService',
                            self._get_bs_link(upsert['defaultService']['name'])),
-        jp.PathContainsPredicate('pathMatchers/defaultService',
-                                 self._get_bs_link(pm['defaultService']['name'])),
+        jp.PathContainsPredicate(
+          'pathMatchers/defaultService',
+          self._get_bs_link(pm['defaultService']['name'])),
       ]))
       pred_list.append(
         jp.AND([jp.PathContainsPredicate('hostRules/hosts',
@@ -211,8 +216,9 @@ class GoogleHttpLoadBalancerTestScenario(sk.SpinnakerTestScenario):
       )
       for pr in pm['pathRules']:
         pred_list.append(
-         jp.PathContainsPredicate('pathMatchers/pathRules/service',
-                                  self._get_bs_link(pr['backendService']['name'])),
+         jp.PathContainsPredicate(
+           'pathMatchers/pathRules/service',
+           self._get_bs_link(pr['backendService']['name'])),
         )
         for path in pr['paths']:
           pred_list.append(
@@ -224,7 +230,8 @@ class GoogleHttpLoadBalancerTestScenario(sk.SpinnakerTestScenario):
     if upsert['certificate'] == '':
       port_string = '%s-%s' % (upsert['portRange'], upsert['portRange'])
 
-    (contract_builder.new_clause_builder('Forwarding Rule Created', retryable_for_secs=30)
+    (contract_builder.new_clause_builder('Forwarding Rule Created',
+                                         retryable_for_secs=30)
      .list_resource('globalForwardingRules')
      .contains_pred_list(
        [
@@ -232,8 +239,8 @@ class GoogleHttpLoadBalancerTestScenario(sk.SpinnakerTestScenario):
          jp.PathEqPredicate('portRange', port_string)
        ]))
 
-    proxy_clause_builder = contract_builder.new_clause_builder('Target Proxy Created',
-                                                               retryable_for_secs=30)
+    proxy_clause_builder = contract_builder.new_clause_builder(
+      'Target Proxy Created', retryable_for_secs=30)
     self._add_proxy_clause(upsert['certificate'], proxy_clause_builder)
 
 
@@ -293,7 +300,8 @@ class GoogleHttpLoadBalancerTestScenario(sk.SpinnakerTestScenario):
     self._add_contract_clauses(contract_builder, upsert)
 
     return st.OperationContract(
-      self.new_post_operation(title='upsert min http lb', data=payload, path='tasks'),
+      self.new_post_operation(title='upsert min http lb',
+                              data=payload, path='tasks'),
       contract=contract_builder.build()
     )
 
@@ -323,7 +331,8 @@ class GoogleHttpLoadBalancerTestScenario(sk.SpinnakerTestScenario):
       application=self.TEST_APP
     )
     contract_builder = gcp.GcpContractBuilder(self.gcp_observer)
-    (contract_builder.new_clause_builder('Health Check Removed', retryable_for_secs=30)
+    (contract_builder.new_clause_builder('Health Check Removed',
+                                         retryable_for_secs=30)
      .list_resource('httpHealthChecks')
      .excludes_path_value('name', self.__proto_hc['name'])
     )
@@ -551,7 +560,7 @@ class GoogleHttpLoadBalancerTestScenario(sk.SpinnakerTestScenario):
      .list_resource('firewalls')
      .contains_pred_list(
        [
-         jp.PathContainsPredicate('name', self.__lb_name + '-rule') # TODO(jacobkiefer): Change name.
+         jp.PathContainsPredicate('name', self.__lb_name + '-rule')
        ]
      )
     )
