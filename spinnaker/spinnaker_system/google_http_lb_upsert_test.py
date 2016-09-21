@@ -104,14 +104,12 @@ class GoogleHttpLoadBalancerTest(st.AgentTestCase):
                                   'insert',
                                   resource_type='sslCertificates',
                                   project=bindings['GCE_PROJECT'],
-                                  body=cls.make_ssl_cert(cls.FIRST_CERT,
-                                                         bindings))
+                                  body=cls.make_ssl_cert(cls.FIRST_CERT))
     compute_agent.invoke_resource(context,
                                   'insert',
                                   resource_type='sslCertificates',
                                   project=bindings['GCE_PROJECT'],
-                                  body=cls.make_ssl_cert(cls.SECOND_CERT,
-                                                         bindings))
+                                  body=cls.make_ssl_cert(cls.SECOND_CERT))
 
 
   @classmethod

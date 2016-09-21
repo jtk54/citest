@@ -133,15 +133,17 @@ class GoogleHttpLoadBalancerTestScenario(sk.SpinnakerTestScenario):
   def _get_bs_link(self, bs):
     '''Make a fully-formatted backend service link.
     '''
-    return (GCE_URL_PREFIX + self.bindings['GCE_PROJECT'] +
-            '/global/backendServices/' + bs)
+    return (GCE_URL_PREFIX
+            + self.bindings['GOOGLE_PRIMARY_MANAGED_PROJECT_ID']
+            + '/global/backendServices/' + bs)
 
 
   def _get_hc_link(self, hc):
     '''Make a fully-formatted health check link.
     '''
-    return (GCE_URL_PREFIX + self.bindings['GCE_PROJECT'] +
-            '/global/httpHealthChecks/' + hc)
+    return (GCE_URL_PREFIX
+            + self.bindings['GOOGLE_PRIMARY_MANAGED_PROJECT_ID']
+            + '/global/httpHealthChecks/' + hc)
 
 
   def _set_all_hcs(self, upsert, hc):
