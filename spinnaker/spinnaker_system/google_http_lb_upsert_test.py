@@ -137,7 +137,6 @@ class GoogleHttpLoadBalancerTest(st.AgentTestCase):
     return citest.base.TestRunner.global_runner().get_shared_data(
         GoogleHttpLoadBalancerTestScenario)
 
-  # Test letters f and n are reserved for another test derived from this one.
   def test_c_upsert_min_lb(self):
     self.run_test_case(self.scenario.upsert_min_load_balancer())
 
@@ -146,6 +145,8 @@ class GoogleHttpLoadBalancerTest(st.AgentTestCase):
 
   def test_e_add_security_group(self):
     self.run_test_case(self.scenario.add_security_group())
+
+  # Test letters f and n are reserved for another test derived from this one.
 
   def test_g_change_hc(self):
     self.run_test_case(self.scenario.change_health_check())
@@ -167,6 +168,8 @@ class GoogleHttpLoadBalancerTest(st.AgentTestCase):
 
   def test_m_change_cert(self):
     self.run_test_case(self.scenario.add_cert(self.__class__.SECOND_CERT))
+
+  # Test letters f and n are reserved for another test derived from this one.
 
   def test_o_delete_lb(self):
     self.run_test_case(self.scenario.delete_load_balancer())
