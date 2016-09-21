@@ -103,12 +103,12 @@ class GoogleHttpLoadBalancerTest(st.AgentTestCase):
     compute_agent.invoke_resource(context,
                                   'insert',
                                   resource_type='sslCertificates',
-                                  project=bindings['GCE_PROJECT'],
+                                  project=bindings['GOOGLE_PRIMARY_MANAGED_PROJECT_ID'],
                                   body=cls.make_ssl_cert(cls.FIRST_CERT))
     compute_agent.invoke_resource(context,
                                   'insert',
                                   resource_type='sslCertificates',
-                                  project=bindings['GCE_PROJECT'],
+                                  project=bindings['GOOGLE_PRIMARY_MANAGED_PROJECT_ID'],
                                   body=cls.make_ssl_cert(cls.SECOND_CERT))
 
 
@@ -124,12 +124,12 @@ class GoogleHttpLoadBalancerTest(st.AgentTestCase):
     compute_agent.invoke_resource(context,
                                   'delete',
                                   resource_type='sslCertificates',
-                                  project=bindings['GCE_PROJECT'],
+                                  project=bindings['GOOGLE_PRIMARY_MANAGED_PROJECT_ID'],
                                   sslCertificate=cls.FIRST_CERT)
     compute_agent.invoke_resource(context,
                                   'delete',
                                   resource_type='sslCertificates',
-                                  project=bindings['GCE_PROJECT'],
+                                  project=bindings['GOOGLE_PRIMARY_MANAGED_PROJECT_ID'],
                                   sslCertificate=cls.SECOND_CERT)
 
 
