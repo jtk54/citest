@@ -165,10 +165,12 @@ class GoogleHttpLoadBalancerTest(st.AgentTestCase):
     self.run_test_case(self.scenario.update_port_range())
 
   def test_l_add_cert(self):
-    self.run_test_case(self.scenario.add_cert(self.__class__.FIRST_CERT))
+    self.run_test_case(self.scenario.add_cert(self.__class__.FIRST_CERT,
+                                              'add cert'))
 
   def test_m_change_cert(self):
-    self.run_test_case(self.scenario.add_cert(self.__class__.SECOND_CERT))
+    self.run_test_case(self.scenario.add_cert(self.__class__.SECOND_CERT,
+                                              'update cert'))
 
   # Test letters f and n are reserved for another test derived from this one.
 

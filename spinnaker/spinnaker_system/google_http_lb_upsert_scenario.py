@@ -472,13 +472,13 @@ class GoogleHttpLoadBalancerTestScenario(sk.SpinnakerTestScenario):
     self._add_contract_clauses(contract_builder, bs_upsert)
 
     return st.OperationContract(
-      self.new_post_operation(title='update host rule',
+      self.new_post_operation(title='update port range',
                               data=payload, path='tasks'),
       contract=contract_builder.build()
     )
 
 
-  def add_cert(self, certname):
+  def add_cert(self, certname, title):
     '''Add cert to targetHttpProxy to make it a targetHttpsProxy.
     '''
     bs_upsert = copy.deepcopy(self.__proto_upsert)
@@ -494,7 +494,7 @@ class GoogleHttpLoadBalancerTestScenario(sk.SpinnakerTestScenario):
     self._add_contract_clauses(contract_builder, bs_upsert)
 
     return st.OperationContract(
-      self.new_post_operation(title='add cert',
+      self.new_post_operation(title=title,
                               data=payload, path='tasks'),
       contract=contract_builder.build()
     )
