@@ -58,7 +58,7 @@ import spinnaker_testing.gate as gate
 import citest.base
 
 
-class GoogleSmokeTestScenario(GoogleHttpLoadBalancerTestScenario):
+class GoogleSmokeTestScenario(sk.SpinnakerTestScenario):
   """Defines the scenario for the smoke test.
 
   This scenario defines the different test operations.
@@ -383,10 +383,16 @@ class GoogleSmokeTest(st.AgentTestCase):
     self.run_test_case(self.scenario.create_server_group(), timeout_ok=True)
 
   def test_d_upsert_http_load_balancer(self):
-    self.run_test_case(self.scenario.upsert_min_load_balancer())
+    self.run_test_case(GoogleHttpLoadBalancerTestScenario(citest.base.TestRunner
+                                                          .global_runner()
+                                                          .bindings)
+                       .upsert_min_load_balancer())
 
   def test_e_delete_http_load_balancer(self):
-    self.run_test_case(self.scenario.delete_http_load_balancer())
+    self.run_test_case(GoogleHttpLoadBalancerTestScenario(citest.base.TestRunner
+                                                          .global_runner()
+                                                          .bindings)
+                       .delete_http_load_balancer())
 
   def test_x_delete_server_group(self):
     self.run_test_case(self.scenario.delete_server_group(), max_retries=5)
